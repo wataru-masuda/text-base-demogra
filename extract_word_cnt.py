@@ -9,11 +9,21 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--use_domain", action="store_true")
-parser.add_argument("-w", "--create_wordcloud", action="store_true")
+parser.add_argument("--update", action="store_true")
 args = parser.parse_args()
 
 word_list = []
-word_cnt = Counter()
+if args.update:
+    tmp = []
+    with open("word_cnt.txt", "r") as f:
+        for l in f.readlines():
+            w, cnt = l.split()
+            for _ in range(int(cnt)):
+                tmp.append(w)
+    word_cnt = Counter(tmp)
+    del tmp
+else:
+    word_cnt = Counter()
 
 def get_title_and_description_of_webpage(encoding="UTF-8", use_domain=False):
     for url in sys.stdin:
@@ -45,6 +55,10 @@ def parse_text(text):
             word_list.append(word)
             word_cnt.update([word])
 
+def save_word_cnt():
+    with open("word_cnt.txt","w") as wf:
+        for word, cnt in word_cnt.items():
+            wf.write("{}\t{}\n".format(word, cnt))
             
 def main():
     for i, text in enumerate(get_title_and_description_of_webpage(use_domain=args.use_domain)):
@@ -52,10 +66,10 @@ def main():
         if text:
             parse_text(text)
 
-    with open("word_cnt.txt","w") as wf:
-        for word, cnt in word_cnt.items():
-            wf.write("{}\t{}\n".format(word, cnt))
+        if i % 100 == 99:
+            save_word_cnt()
 
+    save_word_cnt()
 
 if __name__ == "__main__":
     main()
