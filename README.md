@@ -8,20 +8,16 @@
 
 - gensim
 
-  - `pipenv install gensim`
-
 - Mecab
 
-  - ```shell
-    brew install mecab mecab-ipadic git curl xz # 必要なもののみインストールする
-    git clone --depth 1 git@github.com:neologd/mecab-ipadic-neologd.git
-    cd mecab-ipadic-neologd
-    ./bin/install-mecab-ipadic-neologd -n
-    ```
+  ```shell
+  brew install mecab mecab-ipadic git curl xz # 必要なもののみインストールする
+  git clone --depth 1 git@github.com:neologd/mecab-ipadic-neologd.git
+  cd mecab-ipadic-neologd
+  ./bin/install-mecab-ipadic-neologd -n
+  ```
 
 - beautifulsoup4
-
-  - `pipenv install beautifulsoup4`
 
 
 
@@ -30,7 +26,7 @@
 1. urlのリストから単語の辞書を作成する。
 
    ```shell
-   cat sample_urllist.txt | python make_common_dict.py
+   cat sample_urllist.txt | pipenv run python make_common_dict.py
    ```
 
    
@@ -40,7 +36,7 @@
 3. urlとBoW (Bag of Words) のマップを作る。
 
    ```shell
-   cat sample_urllist.txt | python make_url2bow_map.py
+   cat sample_urllist.txt | pipenv run python make_url2bow_map.py
    ```
 
    
