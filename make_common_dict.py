@@ -1,75 +1,36 @@
 # -*- coding: utf-8 -*-
-import requests
-from bs4 import BeautifulSoup
-import sys
-import MeCab
-import matplotlib.pyplot as plt
-from collections import Counter
 import argparse
+import sys
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--use_domain", action="store_true")
-parser.add_argument("--update", action="store_true")
-args = parser.parse_args()
+from gensim.corpora.dictionary import Dictionary
 
-word_list = []
-if args.update:
-    tmp = []
-    with open("word_cnt.txt", "r") as f:
-        for l in f.readlines():
-            w, cnt = l.split()
-            for _ in range(int(cnt)):
-                tmp.append(w)
-    word_cnt = Counter(tmp)
-    del tmp
-else:
-    word_cnt = Counter()
+from text_process import fetch_contents_from_url, doc2word_list
 
-def get_title_and_description_of_webpage(encoding="UTF-8", use_domain=False):
-    for url in sys.stdin:
-        print(url.strip())
-        try:
-            res = requests.get("http://"+url.strip()) if use_domain else requests.get(url.strip(), timeout=3.0)
-        except Exception:
-            print("GET request failed")
-            continue
-        res.encoding = encoding
-        soup = BeautifulSoup(res.text, 'html.parser')
-        
-        for meta_tag in soup.find_all('meta', attrs={'name': 'description'}):
-            if soup.title:
-                yield str(soup.title.string) + "\n" + meta_tag.get('content')
-            else:
-                yield None
 
-def parse_text(text):
-    m = MeCab.Tagger("-d /usr/local/lib/mecab/dic/mecab-ipadic-neologd")
-    for row in m.parse(text).split("\n"):
-        word = row.split()[0]
-        if word == "EOS":
-            break
-        pos = row.split()[-1]
-        if "名詞-サ変接続" in pos or "数" in pos:
-            continue
-        if "名詞" in pos or "形容詞" in pos or "動詞" in pos:
-            word_list.append(word)
-            word_cnt.update([word])
-
-def save_word_cnt():
-    with open("word_cnt.txt","w") as wf:
-        for word, cnt in word_cnt.items():
-            wf.write("{}\t{}\n".format(word, cnt))
-            
 def main():
-    for i, text in enumerate(get_title_and_description_of_webpage(use_domain=args.use_domain)):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--use_domain", action="store_true")
+    parser.add_argument("--update", action="store_true")
+    parser.add_argument("--save_interval", type=int, default=100)
+    args = parser.parse_args()
+
+    if args.update:
+        common_dict = Dictionary.load_from_text("./common_dict.txt")
+    else:
+        common_dict = Dictionary()
+    for i, url in enumerate(sys.stdin):
         print("url " + str(i))
-        if text:
-            parse_text(text)
+        text = fetch_contents_from_url(url.strip(), use_domain=args.use_domain)
+        if not text:
+            continue
 
-        if i % 100 == 99:
-            save_word_cnt()
+        word_list = doc2word_list(text)
+        common_dict.add_documents([word_list])
+        
+        if i % args.save_interval == args.save_interval - 1:
+            common_dict.save_as_text("./common_dict.txt")
 
-    save_word_cnt()
+    common_dict.save_as_text("./common_dict.txt")
 
 if __name__ == "__main__":
     main()
