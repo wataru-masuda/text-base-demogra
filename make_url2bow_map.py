@@ -13,7 +13,7 @@ def main():
     parser.add_argument("--update", action="store_true")
     args = parser.parse_args()
 
-    common_dict = Dictionary.load_from_text("./common_dic.txt")
+    common_dict = Dictionary.load_from_text("./common_dict.txt")
 
     f = open("url2bow_map.csv", "a")
     for i, url in enumerate(sys.stdin):
