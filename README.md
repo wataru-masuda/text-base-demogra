@@ -7,10 +7,21 @@
 ## Requirements
 
 - gensim
+
+  - `pipenv install gensim`
+
 - Mecab
+
+  - ```shell
+    brew install mecab mecab-ipadic git curl xz # 必要なもののみインストールする
+    git clone --depth 1 git@github.com:neologd/mecab-ipadic-neologd.git
+    cd mecab-ipadic-neologd
+    ./bin/install-mecab-ipadic-neologd -n
+    ```
+
 - beautifulsoup4
 
-- 
+  - `pipenv install beautifulsoup4`
 
 
 
