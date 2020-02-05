@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import requests
 import sys
 
 from gensim.corpora.dictionary import Dictionary
-import requests
 from bs4 import BeautifulSoup
 import MeCab
 
