@@ -41,7 +41,7 @@ def main():
     args = parser.parse_args()
 
     date_user_actions_log = args.date_user_actions_log if args.date_user_actions_log else (
-        datetime.datetime.now() - datetime.timedelta(1)).strftime("%Y%m%d")
+        datetime.datetime.now() - datetime.timedelta(2)).strftime("%Y%m%d")
     validate_date_arg(date_user_actions_log)
 
     dictionary = Dictionary.load_from_text(args.common_dict)
