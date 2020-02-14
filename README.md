@@ -32,6 +32,7 @@
 1. urlのリストから単語の辞書を作成する。
 
    ```shell
+   cd preprocess
    cat sample_urllist.txt | pipenv run python make_common_dict.py
    ```
 
@@ -42,6 +43,7 @@
 3. urlとBoW (Bag of Words) のマップを作る。
 
    ```shell
+   cd preprocess
    cat sample_urllist.txt | pipenv run python make_url2bow_map.py
    ```
 
@@ -60,7 +62,7 @@
 gidごとのbowからLDAモデルの学習を行う。
 
 ```
-pipenv run python train_lda.py 
+pipenv run python lda/train_lda.py 
 ```
 
 オプション
@@ -76,7 +78,7 @@ pipenv run python train_lda.py
 学習済みLDAモデルでgidごとのBoWからgidごとのtopicsに変換する。
 
 ```
-pipenv run python generate_lda.py
+pipenv run python lda/generate_lda.py
 ```
 
 オプション
