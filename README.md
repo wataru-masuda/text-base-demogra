@@ -6,13 +6,12 @@
 
 ## Requirements
 
-- beautifulsoup4
-
 - gensim
 
 - beautifulsoup4
 
 - mecab-python3
+
   Mecab
 
   ```
@@ -49,6 +48,7 @@
    
 
 4. 3で作成した`url2bow.csv`を参照して、bqテーブルを作成する。
+
    https://console.cloud.google.com/bigquery?cloudshell=false&hl=ja&organizationId=426825513162&project=gj-lamp&p=gj-lamp&d=masuda_partial_data&t=url2bow&page=table
 
 5. ユーザ行動履歴`masuda_partial_data.auction_user_actions_YYYYmmdd`テーブルと4で作成したurl2bowテーブルから、gidごとのBoWを作成する。
@@ -82,7 +82,10 @@ pipenv run python generate_lda.py
 オプション
 
 - model_path : 学習済みldaモデルファイルの保存先。`default="./lda_tfidf.model"`
+
 - rawdata_gcs_prefix : 生成用データのパスのprefix。`default="gs://geniee-test-gcs/gid2bow_"`
+
   デフォルトの値の場合、生成されたgidごとの特徴量のデータファイルのパスは`gs://geniee-test-gcs/gid2topics/<YYYYmmdd>-*.csv.gz`になる。
+
 - date_user_actions_log : 生成用データに用いるユーザ行動履歴のlogの日付。設定しない場合は一昨日の日付になる。
 
