@@ -19,12 +19,12 @@ def main():
     else:
         common_dict = Dictionary()
     for i, url in enumerate(sys.stdin):
-        print("url " + str(i))
+        print(i, url)
         text = fetch_contents_from_url(url.strip(), use_domain=args.use_domain)
         if not text:
             continue
-
-        word_list = doc2word_list(text)
+        print(text)
+        word_list = doc2word_list(text.strip())
         common_dict.add_documents([word_list])
         
         if i % args.save_interval == args.save_interval - 1:

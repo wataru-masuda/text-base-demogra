@@ -6,7 +6,7 @@ from gensim.corpora.dictionary import Dictionary
 
 from text_process import fetch_contents_from_url, doc2word_list
 
-            
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--use_domain", action="store_true")
@@ -18,6 +18,7 @@ def main():
     f = open("url2bow_map.csv", "a")
     for i, url in enumerate(sys.stdin):
         print("url " + str(i))
+        print(url)
         text = fetch_contents_from_url(url.strip(), use_domain=args.use_domain)
         if not text:
             continue

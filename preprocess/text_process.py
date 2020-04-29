@@ -16,17 +16,18 @@ def fetch_contents_from_url(url, encoding="UTF-8", use_domain=False, timeout=3.0
 
     res.encoding = encoding
     try:
-        soup = BeautifulSoup(res.text, 'html.parser')
+        soup = BeautifulSoup(res.content, 'html.parser')
     except Exception:
         print("failed to parse html text")
         return None
-        
+
     for meta_tag in soup.find_all('meta', attrs={'name': 'description'}):
         if soup.title:
             return str(soup.title.string) + "\n" + str(meta_tag.get('content'))
         else:
             return None
-        
+
+    
 def doc2word_list(text):
     m = MeCab.Tagger("-d /usr/local/lib/mecab/dic/mecab-ipadic-neologd")
 
