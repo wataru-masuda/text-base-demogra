@@ -2,6 +2,7 @@ import argparse
 import gzip
 import sys
 
+import gensim
 from gensim.models.ldamodel import LdaModel
 
 
@@ -10,8 +11,6 @@ def convert_bow2topics(bow, lda):
               for b in bow.split()]
     try:
         topics = lda.get_document_topics(corpus, minimum_probability=1e-30)
-        topics = [str(tup[0])+":"+str(tup[1]) for tup in topics]
-        topics = "\t".join(topics)
         return topics
     except Exception:
         return None
@@ -32,9 +31,10 @@ def main():
             continue
         gid, bow = row.split(",", 1)
         topics = convert_bow2topics(bow, lda)
-        sys.stdout.write("\r{}, {}".format(i, topics))
-        if topics:
-            wf.write(gid + "," + topics + "\n")
+        if not topics or type(topics) == gensim.interfaces.TransformedCorpus:
+            continue
+        for index, prob in topics:
+            wf.write(gid + "," + str(index) + "," + str(prob) + "\n")
 
     rf.close()
     wf.close()
