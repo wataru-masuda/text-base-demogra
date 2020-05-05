@@ -1,4 +1,4 @@
-DATE="20200329"
+DATE="20200328"
 bq extract --compression GZIP masuda_partial_data.gid2bow_$DATE gs://geniee-test-gcs/gid2bow_$DATE-*.csv.gz
 gsutil cp gs://geniee-test-gcs/gid2bow_$DATE*.csv.gz .
 gsutil rm gs://geniee-test-gcs/gid2bow_$DATE*.csv.gz
